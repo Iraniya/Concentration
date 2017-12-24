@@ -15,6 +15,9 @@ class ViewController: UIViewController {
     
     private lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
     
+    private var emojiChoices = ["🦇", "😱", "🙀", "😈", "🎃", "👻", "🍭", "🍬", "🍎"]
+    private var emoji = [Int: String]()
+    
     var numberOfPairsOfCards:Int {
         return (cardButtons.count + 1) / 2
     }
@@ -51,19 +54,12 @@ class ViewController: UIViewController {
         
     }
     
-    var emojiChoices = ["🦇", "😱", "🙀", "😈", "🎃", "👻", "🍭", "🍬", "🍎"]
-    var emoji = [Int: String]()
-    
-    func emoji(for card: Card) -> String {
+    private func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count - 1)))
-            emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
+            emoji[card.identifier] = emojiChoices.remove(at: (emojiChoices.count - 1).arc4Random)
         }
         return emoji[card.identifier] ?? "?"
     }
-    
-
-    
 }
 
 extension Int {
@@ -77,6 +73,4 @@ extension Int {
             return 0
         }
     }
-    
 }
-
