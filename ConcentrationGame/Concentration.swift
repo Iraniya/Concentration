@@ -13,14 +13,7 @@ class Concentration {
     private(set) var cards = [Card]()
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
-            var foundIndex:Int?
-            for index in cards.indices {
-                if cards[index].isFaceUp {
-                    guard foundIndex == nil else { return nil }
-                    foundIndex = index
-                }
-            }
-            return foundIndex
+            return cards.indices.filter { cards[$0].isFaceUp}.oneAndOnly
         }
         set {
             for index in cards.indices {
@@ -34,7 +27,7 @@ class Concentration {
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // check if cards match
-                if cards[matchIndex].identifier == cards[index].identifier {
+                if cards[matchIndex] == cards[index] {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                 }
@@ -46,6 +39,7 @@ class Concentration {
         }
     }
     
+    
     init(numberOfPairsOfCards: Int) {
         assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)) : You must have at least one pair of cards")
         for _ in 1...numberOfPairsOfCards {
@@ -53,5 +47,11 @@ class Concentration {
             cards += [card, card]
         }
         //    TODO: Shuffle the cards
+    }
+}
+
+extension Collection {
+    var oneAndOnly:Element? {
+        return count == 1 ? first : nil
     }
 }
